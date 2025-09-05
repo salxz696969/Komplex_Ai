@@ -24,6 +24,7 @@ async def explain_ai(request: Request):
     data = await request.json()
     input_text = data.get("input")
     language = data.get("language")
+    previousContext = data.get("previousContext")
 
     if not input_text or not language:
         return {"error": "Missing input or language"}
@@ -33,6 +34,7 @@ async def explain_ai(request: Request):
         f'Is this input "{input_text}" about math? '
         f'If so, explain it in "{language}". '
         f'You don\'t need to say yes or no just say the result and if it is not return "បញ្ចូលមិនទាក់ទងនឹងគណិតវិទ្យា។"'
+        f' If there is previous context, use it to help explain: "{previousContext}"'
     )
 
     return {"result": response.text}
