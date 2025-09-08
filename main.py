@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Header, HTTPException
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
 
-# Load env variables from .env if available
+# Load env variables
 load_dotenv()
 
 # Configure API key
@@ -24,7 +24,13 @@ model = genai.GenerativeModel("gemini-2.5-flash")
 
 
 @app.post("/gemini")
-async def explain_ai(request: Request):
+async def explain_ai(
+    request: Request,
+    x_api_key: str = Header(None)  # Expecting a header like:  X-API-Key: <key>
+):
+    if x_api_key != INTERNAL_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing API key")
+
     data = await request.json()
     input_text = data.get("input")
     language = data.get("language")
@@ -33,7 +39,6 @@ async def explain_ai(request: Request):
     if not input_text or not language:
         return {"error": "Missing input or language"}
 
-    # Generate response
     response = model.generate_content(
         f'Is this input "{input_text}" about math? '
         f'If so, explain it in "{language}". '
