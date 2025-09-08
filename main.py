@@ -13,6 +13,10 @@ if not api_key:
 
 genai.configure(api_key=api_key)
 
+INTERNAL_KEY = os.getenv("INTERNAL_API_KEY")
+if not INTERNAL_KEY:
+    raise ValueError("INTERNAL_API_KEY not set in environment")
+
 app = FastAPI()
 
 # Create model once at startup
