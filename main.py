@@ -26,7 +26,7 @@ model = genai.GenerativeModel("gemini-2.5-flash")
 @app.post("/gemini")
 async def explain_ai(
     request: Request,
-    x_api_key: str = Header(None)  # Expecting a header like:  X-API-Key: <key>
+    x_api_key: str = Header(None),  # Expecting a header like:  X-API-Key: <key>
 ):
     if x_api_key != INTERNAL_KEY:
         raise HTTPException(status_code=401, detail="Invalid or missing API key")
@@ -40,7 +40,7 @@ async def explain_ai(
         return {"error": "Missing input or language"}
 
     response = model.generate_content(
-    f"""
+        f"""
         You are a helpful science tutor. 
         Your job is to **explain clearly** and **format beautifully**. 
         The input may be about one of these topics:
@@ -72,6 +72,11 @@ async def explain_ai(
 
         Now give the final, well-formatted explanation.
     """
-)
+    )
 
     return {"result": response.text}
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
