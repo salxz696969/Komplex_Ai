@@ -22,6 +22,9 @@ app = FastAPI()
 # Create model once at startup
 model = genai.GenerativeModel("gemini-2.5-flash")
 
+@app.get("/ping")
+async def ping():
+    return {"message": "pong"}
 
 @app.post("/gemini")
 async def explain_ai(
