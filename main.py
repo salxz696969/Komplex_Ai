@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Header, HTTPException
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
+from pre_prompt import pre_prompt
 
 # Load env variables
 load_dotenv()
@@ -42,40 +43,7 @@ async def explain_ai(
     if not input_text or not language:
         return {"error": "Missing input or language"}
 
-    response = model.generate_content(
-        f"""
-        You are a helpful science tutor. 
-        Your job is to **explain clearly** and **format beautifully**. 
-        The input may be about one of these topics:
-        - Mathematics
-        - Physics
-        - Chemistry
-        - Biology
-
-        ### Rules:
-        1. If the input is about **Math, Physics, Chemistry, or Biology**:
-            - Explain in **{language}** only (do not mix with English if {language} is not English).
-            - Use a **friendly but professional tone** (like a supportive teacher).
-            - Format the response with:
-             - **Line breaks** between steps and sections.
-             - **Equations** written cleanly (LaTeX style if possible).
-             - **Bullet points or numbered steps** when breaking down concepts.
-             - **Emojis** where helpful (📘 ➝ topic, 🧮 ➝ math steps, 🧪 ➝ chemistry, ⚛️ ➝ physics, 🧬 ➝ biology).
-           - Keep equations and explanations very easy to read, never bury formulas inside text.
-           - If there is `previousContext`, use it to improve clarity and continuity.
-
-        2. If the input is **not about these four subjects**, reply in {language} with a short, kind message like:
-           "សូមអភ័យទោស 🙏 ខ្ញុំអាចជួយបានតែជាមួយ គណិតវិទ្យា, រូបវិទ្យា, គីមីវិទ្យា និង ជីវវិទ្យា ប៉ុណ្ណោះ។"
-
-        ### Input:
-        "{input_text}"
-
-        ### Previous context (if any):
-        "{previousContext}"
-
-        Now give the final, well-formatted explanation.
-    """
-    )
+    response = model.generate_content(pre_prompt(input_text, language, previousContext))
 
     return {"result": response.text}
 
