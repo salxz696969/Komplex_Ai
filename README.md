@@ -86,7 +86,7 @@ komplex-ai-backend/
 4. **Configure environment variables**
    ```bash
    # Create .env file
-   cp .env.example .env
+   cp envExample.txt .env
    ```
    
    Edit `.env` with your configuration:
