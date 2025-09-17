@@ -67,7 +67,7 @@ komplex-ai-backend/
    # Windows PowerShell
    python -m venv .venv
    .\.venv\Scripts\activate
-   
+
    # Linux/macOS
    python3 -m venv .venv
    source .venv/bin/activate
@@ -104,9 +104,19 @@ komplex-ai-backend/
 
 ### Option 2: Docker Deployment
 
+1. **Clone the repository**
    ```bash
    git clone https://github.com/salxz696969/Komplex_Ai.git
    cd Komplex_Ai
+   ```
+
+2. **Copy environment example file**
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Build and start the containers**
+   ```bash
    docker-compose up --build
    ```
 
