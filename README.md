@@ -112,7 +112,7 @@ komplex-ai-backend/
 
 2. **Copy environment example file**
    ```bash
-   cp .env.example .env
+   cp envExample.txt .env
    ```
 
 3. **Build and start the containers**
